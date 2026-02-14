@@ -41,11 +41,13 @@ const registerUser = asyncHandler(async (req,res,next)=> {
 
     //const avatarLocalPath = req.files?.avatar?.[0]?.path;
     //const coverImageLocalPath = req.files?.coverImage[0]?.path;
-    let avatarLocalPath;
+    // let avatarLocalPath;
 
-    if (req.files && Array.isArray(req.files.avatar) && req.files.avatar.length > 0) {
-        avatarLocalPath = req.files.avatar[0].path
-    }
+    // if (req.files && Array.isArray(req.files.avatar) && req.files.avatar.length > 0) {
+    //     avatarLocalPath = req.files.avatar[0].path
+    // }
+
+    const avatarLocalPath = req.files?.avatar[0]?.path;
 
 
     let coverImageLocalPath;
@@ -77,8 +79,9 @@ console.log("Avatar Local Path: ", avatarLocalPath);
         email,
         password,
         username: username.toLowerCase()
-    })
+    });
 
+    console.log("✅ User created in DB:", user._id);
 
     //check for user creation
     //remove password and refresh token field from response
@@ -86,7 +89,7 @@ console.log("Avatar Local Path: ", avatarLocalPath);
     const createdUser = await User.findById(user._id).select(
         "-password -refreshToken"
     )
-
+    console.log("✅ CreatedUser fetched");
     if(!createdUser){
         throw new ApiError(500, "Something went wrong while registering user")
     }
